@@ -35,16 +35,9 @@
         skipDiacritics: true,
       }">
     </vue-good-table>
-    <h3>Remote Table</h3>
-    <remote-table/>
-    <h3>Grouped Table</h3>
-     <grouped-table></grouped-table>
-  </div>
 </template>
 
 <script>
-import GroupedTable from './grouped-table.vue';
-import RemoteTable from './remote-table.vue';
 
 export default {
   name: 'test',
@@ -423,10 +416,6 @@ export default {
     //     console.log(response);
     //     this.rows = response.data;
     //   });
-  },
-  components: {
-    'grouped-table': GroupedTable,
-    RemoteTable,
   },
 };
 </script>
