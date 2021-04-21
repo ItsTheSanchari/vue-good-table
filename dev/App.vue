@@ -1,12 +1,5 @@
 <template>
   <div>
-    {{ selectedIds }}
-    <button @click="rows = [];">empty row</button>
-    <button @click="resetTable">reset Table</button>
-    <button @click="hideColumn">hide column</button>
-    <button @click="setFilter">SetFilter</button>
-    <button @click="changePage">Change Page</button>
-    <input type="text" v-model="searchTerm">
     <vue-good-table
       ref="my-table"
       @on-column-filter="onColumnFilter"
@@ -22,63 +15,90 @@
       :select-options="{
         enabled: true,
         selectOnCheckboxOnly: false,
-        disableSelectInfo: true,
+        disableSelectInfo: true
       }"
       theme="polar-bear"
       styleClass="vgt-table"
       :sort-options="{
         enabled: true,
-        multipleColumns: false,
+        multipleColumns: false
       }"
       :search-options="{
         enabled: true,
-        skipDiacritics: true,
-      }">
+        skipDiacritics: true
+      }"
+    >
+      <template slot="table-row" slot-scope="props">
+        <span v-if="props.column.field == 'reorder'">
+          <!-- <span @click.stop="reorderElement(props.row)"><i class="fa fa-bars" aria-hidden="true"></i></span> -->
+          <div
+            class="btn-group"
+            role="group"
+            aria-label="Button group with nested dropdown"
+          >
+            <div class="btn-group" role="group">
+              <button
+                id="btnGroupDrop1"
+                type="button"
+                class="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Action
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                <li><a class="dropdown-item" @click.stop="justifyPosition('top')">Move To Top</a></li>
+                <li><a class="dropdown-item" @click.stop="justifyPosition('top')">Move To Bottom</a></li>
+              </ul>
+            </div>
+          </div>
+        </span>
+      </template>
     </vue-good-table>
+  </div>
 </template>
 
 <script>
-
 export default {
-  name: 'test',
+  name: "test",
   data() {
     return {
       currentPage: 1,
       selectedIds: [],
-      rowStyleClass: 'red',
-      searchTerm: '',
+      rowStyleClass: "red",
+      searchTerm: "",
       paginationOptions: {
         enabled: true,
-        mode: 'records',
+        mode: "records",
         perPage: 3,
         perPageDropdown: [3, 5, 10, 200, 300, 500, 1000],
-        perPageDropdownEnabled: true,
+        perPageDropdownEnabled: true
         // infoFn: (params) => `alala ${params.firstRecordOnPage} to ${params.lastRecordOnPage} of ${params.totalRecords}`,
       },
       columns: [
         {
-          label: 'Name',
-          field: 'name',
-          width: '200px',
+          label: "Name",
+          field: "name",
+          width: "200px",
           filterOptions: {
             enabled: true,
-            placeholder: 'All',
-            trigger: 'enter',
+            placeholder: "All",
+            trigger: "enter"
             // filterDropdownItems: ['Chris', 'Dan', 'Susan'],
             // filterValue: 'Chris',
-          },
+          }
         },
         {
-          label: 'Age',
-          field: 'age',
-          type: 'number',
-          tooltip: 'Age tooltip',
-          firstSortType: 'desc',
+          label: "Age",
+          field: "age",
+          type: "number",
+          tooltip: "Age tooltip",
+          firstSortType: "desc",
           filterOptions: {
             enabled: true,
             // filterDropdownItems: ['24', '16', '30'],
-            styleClass: 'class1',
-            trigger: 'enter',
+            styleClass: "class1",
+            trigger: "enter"
             // filterDropdownItems: [
             //   {
             //     value: 24,
@@ -89,107 +109,105 @@ export default {
             //     text: '16',
             //   },
             // ],
-          },
+          }
         },
         {
           filterOptions: {
-            enabled: true,
+            enabled: true
           },
           sortable: false,
-          label: 'Created On',
-          field: 'createdAt',
-          type: 'date',
-          dateInputFormat: 'yyyy-MM-dd',
-          dateOutputFormat: 'PPPP',
+          label: "Created On",
+          field: "createdAt",
+          type: "date",
+          dateInputFormat: "yyyy-MM-dd",
+          dateOutputFormat: "PPPP"
         },
         {
-          label: 'Percent',
-          field: 'score',
-          type: 'percentage',
+          label: "Percent",
+          field: "score",
+          type: "percentage"
         },
         {
-          label: 'func',
+          label: "func",
           field: this.funcValue,
-          type: 'number',
+          type: "number"
         },
         {
-          label: 'Valid',
+          label: "Valid",
           field: this.fieldValid,
-          type: 'boolean',
+          type: "boolean",
           filterOptions: {
             enabled: true,
-            filterDropdownItems: [
-              true,
-              false,
-            ],
-          },
+            filterDropdownItems: [true, false]
+          }
         },
         {
-          label: 'Exact',
+          label: "Exact",
           field: this.fieldExact,
           filterOptions: {
             enabled: true,
-            filterDropdownItems: [
-              'match',
-              'rematch',
-            ],
-          },
+            filterDropdownItems: ["match", "rematch"]
+          }
+        },
+        {
+          label: "Reorder",
+          field: "reorder"
         }
       ],
       rows: [
         // { id:1, name:"John", age: 20, createdAt: '2018-02-18T00:00:43-05:00',score: 0.03343 },
         {
           id: 2,
-          name: 'Jane',
+          name: "Jane",
           age: 24,
-          createdAt: '2011-10-31',
+          createdAt: "2011-10-31",
           score: 0.03343,
           bool: true,
-          exact: 'match',
+          exact: "match",
           average: 1
         },
         {
           id: 3,
-          name: 'Angel',
+          name: "Angel",
           age: 16,
-          createdAt: '2011-10-30',
+          createdAt: "2011-10-30",
           score: 0.03343,
           bool: true,
-          exact: 'match',
+          exact: "match",
           average: null
         },
         {
           id: 4,
-          name: 'Chris',
+          name: "Chris",
           age: 55,
-          createdAt: '2011-10-11',
+          createdAt: "2011-10-11",
           score: 0.03343,
           bool: false,
           exact: null
         },
         {
           id: 5,
-          name: 'Dan',
+          name: "Dan",
           age: 40,
-          createdAt: '',
+          createdAt: "",
           score: 0.03343,
           bool: null,
-          exact: 'rematch',
+          exact: "rematch",
           average: 2
         },
         {
           id: 5,
-          name: '193.23',
+          name: "193.23",
           age: 20,
           createdAt: null,
           score: 0.03343,
           bool: null,
-          exact: 'rematch',
+          exact: "rematch",
           average: 3
         },
         {
           id: 5,
-          name: 'Dan',
+          name: "Dan",
           age: 34,
           createdAt: null,
           score: 0.03343,
@@ -199,38 +217,44 @@ export default {
         },
         {
           id: 6,
-          name: 'John',
+          name: "John",
           age: 20,
-          createdAt: '2011-10-31',
+          createdAt: "2011-10-31",
           score: 0.03343,
           bool: true,
-          exact: 'match',
+          exact: "match",
           average: 1.5
         },
         {
           id: 7,
-          name: 'Ángel',
+          name: "Ángel",
           age: 20,
-          createdAt: '2013-09-21',
+          createdAt: "2013-09-21",
           score: null,
-          bool: 'false',
+          bool: "false",
           exact: null,
           average: 1
         },
         {
           id: 8,
-          name: 'Susan',
+          name: "Susan",
           age: 16,
-          createdAt: '2013-10-31',
+          createdAt: "2013-10-31",
           score: 0.03343,
           bool: true,
-          exact: 'rematch',
+          exact: "rematch",
           average: 1
-        },
-      ],
+        }
+      ]
     };
   },
   methods: {
+    justifyPosition() {
+
+    },
+    reorderElement(eachRow) {
+      console.log("each row", eachRow);
+    },
     fieldValid(row) {
       return row.bool;
     },
@@ -239,25 +263,25 @@ export default {
     },
     changePage() {
       this.currentPage += 1;
-      this.$set(this.paginationOptions, 'setCurrentPage', this.currentPage);
+      this.$set(this.paginationOptions, "setCurrentPage", this.currentPage);
     },
     funcValue(row) {
       return row.age + 5;
     },
     tdClassFunc(row) {
       if (row.age > 50) {
-        return 'red';
+        return "red";
       }
-      return 'green';
+      return "green";
     },
     getRowStyle() {
-      return '';
+      return "";
     },
     hideColumn() {
-      this.$set(this.columns[0], 'hidden', true);
+      this.$set(this.columns[0], "hidden", true);
     },
     resetTable() {
-      this.$refs['my-table'].reset();
+      this.$refs["my-table"].reset();
     },
     onSelectAll(params) {
       console.log(params);
@@ -273,7 +297,7 @@ export default {
     },
     unselectAll() {
       for (let i = 0; i < this.rows.length; i++) {
-        this.$set(this.rows[i], 'selected', false);
+        this.$set(this.rows[i], "selected", false);
       }
     },
     toggleSelectRow(params) {
@@ -285,7 +309,7 @@ export default {
       // }
     },
     selectCell(params) {
-      console.log('select cell called');
+      console.log("select cell called");
       console.log(params);
     },
     searchedRow(params) {
@@ -293,7 +317,7 @@ export default {
     },
     setFilter() {
       // this.columns[0].filterOptions.filterValue = 'John';
-      this.$set(this.columns[0].filterOptions, 'filterValue', 'Chris');
+      this.$set(this.columns[0].filterOptions, "filterValue", "Chris");
       // const column1 = JSON.parse(JSON.stringify(this.columns[0]));
       // column1.filterOptions.filterValue = 'John';
       // this.$set(this.columns, 0, column1);
@@ -309,41 +333,41 @@ export default {
       // });
     },
     autofilter(type) {
-      if (type === 'name') {
-        this.columns[0].filterOptions.filterValue = 'John';
+      if (type === "name") {
+        this.columns[0].filterOptions.filterValue = "John";
       }
-      if (type === 'age') {
-        this.columns[1].filterOptions.filterValue = '>30';
+      if (type === "age") {
+        this.columns[1].filterOptions.filterValue = ">30";
       }
-      if (type === 'reset') {
-        this.columns[0].filterOptions.filterValue = '';
-        this.columns[1].filterOptions.filterValue = '';
+      if (type === "reset") {
+        this.columns[0].filterOptions.filterValue = "";
+        this.columns[1].filterOptions.filterValue = "";
         // this.columns[1].filterOptions.filterValue = null;
       }
     },
 
     filterAge(data, filterString) {
-      if ((filterString === '>30') && (parseInt(data, 10) > 30)) {
+      if (filterString === ">30" && parseInt(data, 10) > 30) {
         return true;
       }
-      if ((filterString === '<=30') && (parseInt(data, 10) <= 30)) {
+      if (filterString === "<=30" && parseInt(data, 10) <= 30) {
         return true;
       }
       return false;
     },
 
     onClick() {
-      console.log('clicked');
-      this.rowStyleClass = 'green';
+      console.log("clicked");
+      this.rowStyleClass = "green";
     },
     addRow() {
       this.rows.push({
         name: `Chris ${Math.random()}`,
-        age: 20,
+        age: 20
       });
     },
     editRow() {
-      this.$set(this.rows[12], 'age', 300);
+      this.$set(this.rows[12], "age", 300);
     },
     sortFn(x, y, col) {
       if (x < y) {
@@ -358,7 +382,7 @@ export default {
       return `lala${value}lala`;
     },
     addFilter() {
-      this.$set(this.columns[2], 'filterValue', 'Jane');
+      this.$set(this.columns[2], "filterValue", "Jane");
       console.log(this.columns);
     },
 
@@ -366,36 +390,36 @@ export default {
     // ===================================================
     onPerPageChange(evt) {
       // { currentPage: 1, currentPerPage: 10, total: 5 }
-      console.log('per-page-changed:');
+      console.log("per-page-changed:");
       console.log(evt);
     },
 
     onPageChange(evt) {
       // { currentPage: 1, currentPerPage: 10, total: 5 }
-      console.log('page-changed:');
+      console.log("page-changed:");
       console.log(evt);
     },
 
     onColumnFilter(params) {
       // { currentPage: 1, currentPerPage: 10, total: 5 }
-      console.log('on-column-filters:');
+      console.log("on-column-filters:");
       console.log(params);
     },
 
     onSearch(params) {
-      console.log('on-search:');
+      console.log("on-search:");
       console.log(params);
     },
 
     onSortChange(params) {
-      console.log('on-sort-change:');
+      console.log("on-sort-change:");
       console.log(params);
       const [nameFilter] = params;
-      console.log(typeof nameFilter.field === 'function');
+      console.log(typeof nameFilter.field === "function");
     },
 
     onRowClick(params) {
-      console.log('on-row-click');
+      console.log("on-row-click");
       console.log(params);
     },
 
@@ -408,7 +432,7 @@ export default {
       console.log(params.selectedRows);
       console.log(selectedIds);
       this.selectedIds = selectedIds;
-    },
+    }
   },
   mounted() {
     // axios.get('https://jsonplaceholder.typicode.com/posts')
@@ -416,24 +440,24 @@ export default {
     //     console.log(response);
     //     this.rows = response.data;
     //   });
-  },
+  }
 };
 </script>
 
 <style lang="css">
-  .row-style{
-    background-color: red;
-  }
-  *{
-    font-family: 'Open Sans';
-  }
-  .red{
-    background-color: red;
-  }
-  .green{
-    background-color: green;
-  }
-  /* .vgt-selection-info-row.info-custom{
+.row-style {
+  background-color: red;
+}
+* {
+  font-family: "Open Sans";
+}
+.red {
+  background-color: red;
+}
+.green {
+  background-color: green;
+}
+/* .vgt-selection-info-row.info-custom{
     background: red;
   } */
 </style>
